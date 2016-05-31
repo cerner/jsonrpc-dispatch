@@ -136,5 +136,5 @@ const request = jsonrpc.request('add', [1,2], function(err, result) {
 })
 
 // 3. Post the JSONRPC message to a server for processing,
-$.post('/jsonrpc-service', request, jsonrpc.handle, 'json')
+$.post('/jsonrpc-service', request, jsonrpc.handle.bind(jsonrpc), 'json')
 ```
