@@ -11,7 +11,7 @@ Thanks.
 * Please browse our github issues before logging new issues.
 * Open an issue with a descriptive title and a summary.
 * Please be as clear and explicit as you can in your description of the problem.
-* Please state the version of Operating System, Browser, and canadarm you are using in the description.
+* Please state the version of Operating System, Browser, and JSONRPC you are using in the description.
 * Include any relevant code in the issue summary.
 
 ## Pull requests
