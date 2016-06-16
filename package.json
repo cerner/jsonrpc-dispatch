@@ -2,18 +2,32 @@
   "name": "jsonrpc",
   "version": "1.0.0",
   "description": "An unopinionated JSONRPC router for JavaScript",
-  "main": "index.js",
+  "main": "lib/src/index.js",
   "scripts": {
-    "test": "mocha",
-    "lint": "eslint index.js"
+    "build": "npm run clean && npm run lint-js && npm run build-es5 && npm run build-webpack && npm run build-minify",
+    "build-doc": "jsdoc  --package package.json -d doc ./src/**/*.js",
+    "build-es5": "babel src --out-dir lib/src && babel test --out-dir lib/test ",
+    "build-minify": "uglifyjs dist/xfc.js > dist/xfc.min.js",
+    "build-webpack": "webpack --progress --colors --display-error-details",
+    "clean": "rm -rf dist lib doc",
+    "test": "npm run clean && npm run lint-js && npm run build-es5 && mocha lib/test",
+    "lint-js": "eslint src/* test/*"
   },
   "keywords": [
     "JSONRPC"
   ],
   "devDependencies": {
+    "babel-cli": "^6.7.5",
+    "babel-core": "^6.7.7",
+    "babel-loader": "^6.2.4",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.6.0",
     "chai": "3.5.0",
-    "eslint": "2.11.1",
-    "mocha": "2.4.5"
+    "eslint": "^2.11.1",
+    "eslint-config-airbnb-base": "^3.0.1",
+    "eslint-plugin-import": "^1.8.1",
+    "mocha": "2.4.5",
+    "webpack": "^1.13.0"
   },
   "dependencies": {
     "node-uuid": "1.4.7"
