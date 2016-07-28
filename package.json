@@ -6,11 +6,11 @@
   "scripts": {
     "build": "npm run clean && npm run lint-js && npm run build-es5 && npm run build-webpack && npm run build-minify",
     "build-doc": "jsdoc  --package package.json -d doc ./src/**/*.js",
-    "build-es5": "babel src --out-dir lib/src && babel test --out-dir lib/test ",
+    "build-es5": "babel src --out-dir lib/src",
     "build-minify": "uglifyjs dist/xfc.js > dist/xfc.min.js",
     "build-webpack": "webpack --progress --colors --display-error-details",
     "clean": "rm -rf dist lib doc",
-    "test": "npm run clean && npm run lint-js && npm run build-es5 && mocha lib/test",
+    "test": "mocha --compilers js:babel-core/register test",
     "lint-js": "eslint src/* test/*"
   },
   "keywords": [
@@ -36,5 +36,5 @@
     "node": ">= 6.0"
   },
   "author": "Cerner Corporation",
-  "license": "MIT"
+  "license": "Apache"
 }
