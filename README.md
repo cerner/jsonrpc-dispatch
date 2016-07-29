@@ -1,4 +1,4 @@
-# JSONRPC
+# JSONRPC Dispatch
 
 JSONRPC is a module for managing [JSONRPC](http://json-rpc.org) requests and
 responses in JavaScript.
@@ -13,17 +13,16 @@ messages.  This means it can be easily integrated with XMLHttpRequests, HTTPServ
 
 ## Includng JSONRPC
 
-Add JS-JSONRPC to your package.json
+Add `jsonrpc-dispatch` to your package.json
 
 ```
-npm install jsonrpc --save
+npm install jsonrpc-dispatch --save
 ```
 
 Require the JSONRPC constructor into the module.
 
 ```js
-// mymodule.js
-JSONRPC = require('jsonprc')
+import JSONRPC from 'jsonrpc-dispatch'
 ```
 ## Using JSONRPC
 

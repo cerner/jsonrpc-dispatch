@@ -1,7 +1,7 @@
 {
-  "name": "jsonrpc",
+  "name": "jsonrpc-dispatch",
   "version": "1.0.0",
-  "description": "An unopinionated JSONRPC router for JavaScript",
+  "description": "An unopinionated JSONRPC dispatcher for JavaScript",
   "main": "lib/src/index.js",
   "scripts": {
     "build": "npm run clean && npm run lint-js && npm run build-es5 && npm run build-webpack && npm run build-minify",
