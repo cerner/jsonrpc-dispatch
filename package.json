@@ -7,11 +7,15 @@
     "build": "npm run clean && npm run test && npm run lint-js && npm run build-es5",
     "build-es5": "babel src --out-dir lib/src",
     "clean": "rm -rf dist lib",
-    "test": "mocha --compilers js:babel-core/register test",
-    "lint-js": "eslint src/* test/*"
+    "test": "npm run lint-js && mocha --compilers js:babel-core/register test",
+    "lint-js": "eslint src/* test/*",
+    "prepublish": "npm run build-es5"
   },
   "keywords": [
     "JSONRPC", "Cerner"
+  ],
+  "files": [
+    "lib"
   ],
   "devDependencies": {
     "babel-cli": "^6.11.4",
