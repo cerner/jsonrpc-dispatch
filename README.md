@@ -89,7 +89,7 @@ Notifications are similar to requests but do not have any responses and thus do 
 | parameters | Array or Object | (Optional) The parameters to pass to the method call |
 
 ```js
-jsonrpc.request('foobar', ['biz', 'baz']);
+jsonrpc.notification('foobar', ['biz', 'baz']);
 ```
 
 
