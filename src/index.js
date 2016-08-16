@@ -5,60 +5,81 @@ const JSONRPCVersion = '2.0';
 
 /**
  * JSONRPC class based on the JSONRPC specification[0]. This object handles creating JSONRPC
- * requests and notification objects and managing callbacks.
+ * requests and notification objects and managing resolving responses.
  *
- * See also:
- * [0] JSONRPC - http://json-rpc.org/wiki/specification
+ * @see {@link  http://json-rpc.org/wiki/specification}
  */
 class JSONRPC {
   /**
    * Initializes a JSONRPC instance..
    * @param {object} methods - The JSONRPC methods to handle.
    */
-  constructor(methods = {}) {
+  constructor(dispatcher, methods = {}) {
     this.version = JSONRPCVersion;
-    this.callbacks = {};
+    this.deferreds = {};
     this.methods = methods;
+    this.dispatcher = dispatcher;
+  }
+
+  /**
+   * Sends the given JSONPRC message using the dispatcher provided.
+   * @param {object} message - A JSONPRC 2.0 message object.
+   */
+  send(message) {
+    message.jsonrpc = this.version;
+    this.dispatcher(message);
   }
 
   /**
    * Create a notification object for the given method and params.
+   * @see {@link  http://www.jsonrpc.org/specification#notification|JSONRPC Notifications}
    *
    * @param {string} method - The RPC method to execute
    * @param {object[]} params - The parameters to execute with the method.
+   * @returns {object} JSONRPC notification object
    */
   notification(method, params = []) {
-    return { method, params, jsonrpc: this.version };
+    this.send({ method, params });
   }
 
   /**
    * Create a request object for the given method and params and passes the result to
    * next(err, result).
+   * @see {@link  http://www.jsonrpc.org/specification#request_object|JSONRPC Requests}
    *
    * @param {string} method - The RPC method to execute
    * @param {object[]} params - The parameters to execute with the method.
-   * @param {function(err, result)} callback - The function which is passed the result.
-   *        If an error is present, result will be undefined.
+   * @param {function} callback - A function to take the result of the request.
+   * @returns {Promise} which is resolved with the response value.
    */
-  request(method, params = [], callback = () => {}) {
+  request(method, params = []) {
     const request = { id: uuid.v4(), method, params, jsonrpc: this.version };
-    this.callbacks[request.id] = callback;
-    return request;
+    const promise = new Promise((resolve, reject) => {
+      // Save the resolve/reject callbacks as a deferred. We do this because
+      // the response may not occur within the scope of the dispatch method. Example
+      // Cross-Domain messaging is sent over postMessage but received via the
+      // message event.
+      this.deferreds[request.id] = { resolve, reject };
+    });
+
+    this.send(request);
+    return promise;
   }
 
   /**
-  * Handles a JSONRPC message.
+  * Handles a JSONRPC message for the following scenarios:
+  * request - Executes the method defined and passes the result to dispatch
+  * response - Resolves the promise associated with the id on the response
+  * notification - Executes the method defined
+  *
   * @param {object} message - The JSONRPC message to handle.
-  * @param {object} context - The context to apply RPC callback function.
-  * @param {function} next - The function to execute with the JSONRPC response object.
-  *                          Only executed for requests.
   */
-  handle(message, context, next) {
+  handle(message) {
     // Requests and notifications have methods defined.
     if (message.method) {
       // Requests have ids
       if (message.id) {
-        this.handleRequest(message, context, next);
+        promise = this.handleRequest(message, context);
 
       // Notifications have no ids
       } else {
@@ -75,54 +96,55 @@ class JSONRPC {
   * Handle a JSONRPC response object and execute the callback associated
   * to the response id..
   * @param {object} response - The JSONRPC response object to handle.
-  * @param {object} context - The context to execute the callback within.
   */
-  handleResponse(response, context) {
-    const callback = this.callbacks[response.id];
-    if (callback && typeof callback === 'function') {
-      callback.apply(context, [response.error, response.result]);
-      delete this.callbacks[response.id];
-    }
-  }
-
-  /**
-  * Handle a JSONRPC request object.
-  * @param {object} request - The JSONRPC request object to handle.
-  * @param {object} context - The context to execute the callback within.
-  * @param {function(response)} next - A function taking the JSONRPC response object to
-  *                                be executed when the result is received.
-  * @return {obj} - A JSONRPC response for the given request.
-  */
-  handleRequest(request, context, next) {
-    const method = this.methods[request.method];
-    if (!method || typeof method !== 'function') {
-      next({ id: request.id, error: ERRORS.METHOD_NOT_FOUND });
+  handleResponse(response) {
+    const deferred = this.deferreds[response.id];
+    if (deferred === undefined) {
       return;
     }
 
-    const callback = (error, result) => {
-      next({ jsonrpc: JSONRPCVersion, id: request.id, result, error });
-    };
-    const params = request.params
-      ? [].concat(request.params, callback)
-      : [callback];
+    if (response.error) {
+      deferred.reject(response.error);
+    } else {
+      deferred.resolve(response.result);
+    }
 
-    method.apply(context, params);
+    delete this.deferreds[response.id];
   }
 
   /**
-  * Handle a JSONRPC notification.
-  * @param {object} request - The JSONRPC notification object to handle.
-  * @param {object} context - The context to execute the callback within.
+  * Handle a JSONRPC request object and execute the method it specifies sending
+  * the result to the dispatcher.
+  * @param {object} request - The JSONRPC request object to handle.
   */
-  handleNotification(request, context) {
+  handleRequest(request) {
+    const method = this.methods[request.method];
+    if (typeof method !== 'function') {
+      const error = {
+        message: `The method ${method} was not found.`,
+        code: ERRORS.METHOD_NOT_FOUND,
+      };
+      this.send({ id: request.id, error });
+      return;
+    }
+    // Success
+    method.apply(request, request.params).then((result) => {
+      this.send({ id: request.id, result });
+    // Error
+    }).catch((message) => {
+      const error = { message, code: ERRORS.INTERNAL_ERROR };
+      this.send({ id: request.id, error });
+    });
+  }
+
+  /**
+  * Handle a JSONRPC notification request and execute the method it specifies.
+  * @param {object} request - The JSONRPC notification object to handle.
+  */
+  handleNotification(request) {
     const method = this.methods[request.method];
     if (method && typeof method === 'function') {
-      const params = request.params
-        ? [].concat(request.params)
-        : [];
-
-      method.apply(context, params);
+      method.apply(request, request.params);
     }
   }
 }
