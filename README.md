@@ -33,10 +33,10 @@ methods it will take requests for.
 const jsonrpc = new JSONRPC([dispatcher], [methods]);
 ```
 
-| name | type |  description |
-| ---  | ---   | ---         |
-| dispatcher | function | A handler which is passed the JSONRPC message object to send. |
-| methods | object | A mapping of method names to function objects which the JSONRPC instance will handle requests for. The functions **must** return a promise. |
+| name       | type     | description                                                                                                                                 |
+|------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| dispatcher | function | A handler which is passed the JSONRPC message object to send.                                                                               |
+| methods    | object   | A mapping of method names to function objects which the JSONRPC instance will handle requests for. The functions **must** return a promise. |
 
 ### Example
 The below example creates a JSONRPC instance which supports a single API to add parmeters together. The result is sent through the dispatcher to the parent frame using the `postMessage` API.
@@ -62,11 +62,10 @@ http://www.jsonrpc.org/specification#request_object
 
 Sends a JSONRPC request to the provided dispatcher. Request takes 2 parameters
 
-
-| name | type |  description |
-| ---  | ---   | ---         |
-| name | String | The method name to send the request for |
-| parameters | Array or Object |  (Optional) The parameters to pass to the method call |
+| name       | type            | description                                          |
+|------------|-----------------|------------------------------------------------------|
+| name       | String          | The method name to send the request for              |
+| parameters | Array or Object | (Optional) The parameters to pass to the method call |
 
 Returns an instance of a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which is resolved or rejected when the response is received.
 
@@ -84,10 +83,10 @@ Sends a JSONRPC notification request to the provided dispatcher.
 Notifications are similar to requests but do not have any responses and thus do not return a promise. Notifications take 2 parameters:
 
 
-| name | type |  description |
-| ---  | ---   | ---         |
-| name | String | The method name to send the request for |
-| parameters | Array or Object |  (Optional) The parameters to pass to the method call |
+| name       | type            | description                                          |
+|------------|-----------------|------------------------------------------------------|
+| name       | String          | The method name to send the request for              |
+| parameters | Array or Object | (Optional) The parameters to pass to the method call |
 
 ```js
 jsonrpc.request('foobar', ['biz', 'baz']);
@@ -99,10 +98,9 @@ jsonrpc.request('foobar', ['biz', 'baz']);
 
 Processes incoming JSONRPC messages to be handled as requests, responses or notifications. Handle takes 3 arguments
 
-| name | type |  description |
-| ---  | ---   | ---         |
+| name    | type   | description                                                                                                                                         |
+|---------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | message | Object | A JSONRPC [request](http://www.jsonrpc.org/specification#request_object) or [response](http://www.jsonrpc.org/specification#response_object) object |
-
 
 ```js
 jsonrpc.handle({
