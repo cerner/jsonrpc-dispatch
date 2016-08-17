@@ -9,7 +9,7 @@ describe('JSONRPC', () => {
 
   describe('#constructor', () => {
     const methods = { foo() {} };
-    const dispatcher = () => {}
+    const dispatcher = () => {};
     const jsonrpc = new JSONRPC(dispatcher, methods);
 
     it('sets the version', () => expect(jsonrpc.version).to.equal('2.0'));
@@ -47,7 +47,7 @@ describe('JSONRPC', () => {
       });
 
       it('stores the deferred', () => {
-        const deferred = jsonrpc.deferreds[request.id]
+        const deferred = jsonrpc.deferreds[request.id];
         expect(deferred).to.be.an('object');
         expect(deferred.resolve).to.be.a('function');
         expect(deferred.reject).to.be.a('function');
@@ -59,10 +59,10 @@ describe('JSONRPC', () => {
   });
 
   describe('#handleRequest', () => {
-    const methods = { add(x, y) { return Promise.resolve(x + y); }};
+    const methods = { add(x, y) { return Promise.resolve(x + y); } };
 
     it('responds with JSONRPC response', (done) => {
-      const request = { id: 1111, method: 'add', params: [1,2], jsonrpc: '2.0' }
+      const request = { id: 1111, method: 'add', params: [1, 2], jsonrpc: '2.0' };
       const jsonrpc = new JSONRPC((response) => {
         expect(response.result).to.equal(3);
         expect(response.jsonrpc).to.equal(request.jsonrpc);
@@ -76,7 +76,7 @@ describe('JSONRPC', () => {
 
 
     it('handles unknown requests with a method not found error', (done) => {
-      const request = { id: 2222, method: 'unknown', params: [1,2], jsonrpc: '2.0' }
+      const request = { id: 2222, method: 'unknown', params: [1, 2], jsonrpc: '2.0' };
       const jsonrpc = new JSONRPC((response) => {
         expect(response.result).to.equal(undefined);
         expect(response.id).to.equal(request.id);
@@ -95,21 +95,20 @@ describe('JSONRPC', () => {
         foo(x, y) {
           expect(x).to.equal(request.params[0]);
           expect(y).to.equal(request.params[1]);
-        }
+        },
       });
 
       jsonrpc.handleNotification(request);
     });
 
     it('handles unknown notifications silently', (done) => {
-      const jsonrpc = new JSONRPC(() => {})
+      const jsonrpc = new JSONRPC(() => {});
       jsonrpc.handleNotification({ method: 'foo', params: ['bar', 'baz'] });
-      done()
+      done();
     });
   });
 
   describe('#handleResponse', () => {
-
     it('executes the response handler', (done) => {
       const jsonrpc = new JSONRPC((request) => {
         jsonrpc.handleResponse({ id: request.id, result: 'foo' });
@@ -118,17 +117,17 @@ describe('JSONRPC', () => {
       jsonrpc.request('foo').then((result) => {
         expect(result).to.equal('foo');
         done();
-      })
+      });
     });
 
     it('passes errors to the response handler', (done) => {
-      const error = { code: ERRORS.METHOD_NOT_FOUND }
+      const error = { code: ERRORS.METHOD_NOT_FOUND };
       const jsonrpc = new JSONRPC((request) => {
-        jsonrpc.handleResponse({ id: request.id, error});
+        jsonrpc.handleResponse({ id: request.id, error });
       });
 
       jsonrpc.request('foo').catch((message) => {
-        expect(message).to.equal(error)
+        expect(message).to.equal(error);
         done();
       });
     });
@@ -146,15 +145,15 @@ describe('JSONRPC', () => {
         foo(x, y) {
           expect(x).to.equal(request.params[0]);
           expect(y).to.equal(request.params[1]);
-        }
+        },
       });
 
       jsonrpc.handle(request);
     });
 
-    it('handles requests', () => {
-      const methods = { add(x, y) { return Promise.resolve(x + y); }};
-      const request = { id: 1111, method: 'add', params: [1,2], jsonrpc: '2.0' }
+    it('handles requests', (done) => {
+      const methods = { add(x, y) { return Promise.resolve(x + y); } };
+      const request = { id: 1111, method: 'add', params: [1, 2], jsonrpc: '2.0' };
       const jsonrpc = new JSONRPC((response) => {
         expect(response.result).to.equal(3);
         expect(response.jsonrpc).to.equal(request.jsonrpc);
@@ -174,7 +173,7 @@ describe('JSONRPC', () => {
       jsonrpc.request('foo').then((result) => {
         expect(result).to.equal('foo');
         done();
-      })
+      });
     });
   });
 });

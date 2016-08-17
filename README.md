@@ -3,8 +3,10 @@
 JSONRPC is a module for managing [JSONRPC](http://json-rpc.org) requests and
 responses in JavaScript.
 
-This implementation is agnostic of the transport mechanism to send and receive JSONRPC
-messages.  This means it can be easily integrated with XMLHttpRequests, HTTPServer and postMessage cross domain messaging. A few of the feature included are:
+This implementation is agnostic of the transport mechanism to send and receive
+JSONRPC messages.  This means it can be easily integrated with XMLHttpRequests,
+HTTPServer and postMessage cross domain messaging.
+A few of the feature included are:
 
 * Async request/response support using promises
 * Method handling for JSONRPC requests
@@ -39,7 +41,9 @@ const jsonrpc = new JSONRPC([dispatcher], [methods]);
 | methods    | object   | A mapping of method names to function objects which the JSONRPC instance will handle requests for. The functions **must** return a promise. |
 
 ### Example
-The below example creates a JSONRPC instance which supports a single API to add parmeters together. The result is sent through the dispatcher to the parent frame using the `postMessage` API.
+The below example creates a JSONRPC instance which supports a single API to add
+parmeters together. The result is sent through the dispatcher to the parent
+frame using the `postMessage` API.
 
 ```js
 const methods = {
@@ -80,7 +84,8 @@ jsonrpc.request('foobar', ['biz', 'baz']).then((result) => {
 http://www.jsonrpc.org/specification#notification
 
 Sends a JSONRPC notification request to the provided dispatcher.
-Notifications are similar to requests but do not have any responses and thus do not return a promise. Notifications take 2 parameters:
+Notifications are similar to requests but do not have any responses and thus
+do not return a promise. Notifications take 2 parameters:
 
 
 | name       | type            | description                                          |
@@ -96,7 +101,8 @@ jsonrpc.notification('foobar', ['biz', 'baz']);
 
 ### JSONRPC#handle
 
-Processes incoming JSONRPC messages to be handled as requests, responses or notifications. Handle takes 3 arguments
+Processes incoming JSONRPC messages to be handled as requests, responses
+or notifications. Handle takes a single argument:
 
 | name    | type   | description                                                                                                                                         |
 |---------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -116,7 +122,8 @@ jsonrpc.handle({
 
 ### AJAX with jQuery
 
-Here is an example usage using AJAX as a transport mechanism to call a JSONRPC service which handles adding 2 numbers together.
+Here is an example usage using AJAX as a transport mechanism to call a JSONRPC
+service which handles adding 2 numbers together.
 
 ```js
 // 1. Create new JSONRPC instance which only makes requests.

@@ -11,7 +11,9 @@ const JSONRPCVersion = '2.0';
  */
 class JSONRPC {
   /**
-   * Initializes a JSONRPC instance..
+   * Initializes a JSONRPC instance.
+   * @param {function} dispatcher - A function which takes a single argument for
+   *                                the JSONRPC object to send to the RPC server.
    * @param {object} methods - The JSONRPC methods to handle.
    */
   constructor(dispatcher, methods = {}) {
@@ -26,7 +28,9 @@ class JSONRPC {
    * @param {object} message - A JSONPRC 2.0 message object.
    */
   send(message) {
+    message = Object.assign({}, message)
     message.jsonrpc = this.version;
+
     this.dispatcher(message);
   }
 
@@ -49,21 +53,20 @@ class JSONRPC {
    *
    * @param {string} method - The RPC method to execute
    * @param {object[]} params - The parameters to execute with the method.
-   * @param {function} callback - A function to take the result of the request.
    * @returns {Promise} which is resolved with the response value.
    */
   request(method, params = []) {
-    const request = { id: uuid.v4(), method, params, jsonrpc: this.version };
-    const promise = new Promise((resolve, reject) => {
+    const id = uuid.v4();
+
+    return new Promise((resolve, reject) => {
       // Save the resolve/reject callbacks as a deferred. We do this because
       // the response may not occur within the scope of the dispatch method. Example
       // Cross-Domain messaging is sent over postMessage but received via the
       // message event.
-      this.deferreds[request.id] = { resolve, reject };
-    });
+      this.deferreds[id] = { resolve, reject };
 
-    this.send(request);
-    return promise;
+      this.send({ id, method, params });
+    });
   }
 
   /**
@@ -79,22 +82,22 @@ class JSONRPC {
     if (message.method) {
       // Requests have ids
       if (message.id) {
-        promise = this.handleRequest(message, context);
+        this.handleRequest(message);
 
       // Notifications have no ids
       } else {
-        this.handleNotification(message, context);
+        this.handleNotification(message);
       }
 
     // Responses have no methods, but have an id
     } else if (message.id) {
-      this.handleResponse(message, context);
+      this.handleResponse(message);
     }
   }
 
   /**
-  * Handle a JSONRPC response object and execute the callback associated
-  * to the response id..
+  * Handle a JSONRPC response object and resolve the promise associated to the
+  * originating request.
   * @param {object} response - The JSONRPC response object to handle.
   */
   handleResponse(response) {
