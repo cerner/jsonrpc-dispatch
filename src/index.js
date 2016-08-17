@@ -28,10 +28,10 @@ class JSONRPC {
    * @param {object} message - A JSONPRC 2.0 message object.
    */
   send(message) {
-    message = Object.assign({}, message)
-    message.jsonrpc = this.version;
+    const data = Object.assign({}, message);
+    data.jsonrpc = this.version;
 
-    this.dispatcher(message);
+    this.dispatcher(data);
   }
 
   /**
@@ -58,7 +58,7 @@ class JSONRPC {
   request(method, params = []) {
     return new Promise((resolve, reject) => {
       const id = uuid.v4();
-      
+
       // Save the resolve/reject callbacks as a deferred. We do this because
       // the response may not occur within the scope of the dispatch method. Example
       // Cross-Domain messaging is sent over postMessage but received via the
