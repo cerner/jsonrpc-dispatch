@@ -56,9 +56,9 @@ class JSONRPC {
    * @returns {Promise} which is resolved with the response value.
    */
   request(method, params = []) {
-    const id = uuid.v4();
-
     return new Promise((resolve, reject) => {
+      const id = uuid.v4();
+      
       // Save the resolve/reject callbacks as a deferred. We do this because
       // the response may not occur within the scope of the dispatch method. Example
       // Cross-Domain messaging is sent over postMessage but received via the
