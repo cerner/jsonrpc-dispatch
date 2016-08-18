@@ -7,8 +7,8 @@ responses in JavaScript.
 
 This implementation is agnostic of the transport mechanism to send and receive
 JSONRPC messages.  This means it can be easily integrated with XMLHttpRequests,
-HTTPServer and postMessage cross domain messaging.
-A few of the feature included are:
+HTTPServer, and postMessage cross domain messaging.
+A few of the features included are:
 
 * Async request/response support using promises
 * Method handling for JSONRPC requests
@@ -29,7 +29,7 @@ import JSONRPC from 'jsonrpc-dispatch'
 ```
 ## Using JSONRPC
 
-The JSONRPC takes 2 arguments, a dispatcher and an object mapping of
+The JSONRPC takes 2 arguments: a dispatcher and an object mapping of
 methods it will take requests for.
 
 
@@ -44,12 +44,12 @@ const jsonrpc = new JSONRPC([dispatcher], [methods]);
 
 ### Example
 The below example creates a JSONRPC instance which supports a single API to add
-parmeters together. The result is sent through the dispatcher to the parent
+parameters together. The result is sent through the dispatcher to the parent
 frame using the `postMessage` API.
 
 ```js
 const methods = {
-  add(x,y) {
+  add(x, y) {
     // Always return a promise
     return Promise.resolve(x + y);
   }
@@ -66,7 +66,8 @@ const jsonrpc = new JSONRPC(dispatcher, methods);
 ### JSONRPC#request
 http://www.jsonrpc.org/specification#request_object
 
-Sends a JSONRPC request to the provided dispatcher. Request takes 2 parameters
+Sends a JSONRPC request to the provided dispatcher. The request takes 2
+parameters
 
 | name       | type            | description                                          |
 |------------|-----------------|------------------------------------------------------|
