@@ -9,4 +9,4 @@ Thanks.
 * Please state the version of Operating System, Browser, and JSONRPC you are using in the description.
 * Include any relevant code in the issue summary.
 
-[1]: https://github.com/cerner/{project_name}/issues
+[1]: https://github.com/cerner/jsonrpc-dispatch/issues
