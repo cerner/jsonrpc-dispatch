@@ -18,7 +18,7 @@ Thanks.
 [1]: http://gun.io/blog/how-to-github-fork-branch-and-pull-request
 [2]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [3]: ./CHANGELOG.md
-[4]: ./LICENSE.txt
+[4]: ./LICENSE
 [5]: http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html
 [6]: https://help.github.com/articles/using-pull-requests
 [7]: ./CONTRIBUTORS.md
