@@ -6,7 +6,7 @@ Before you contribute, please review these guidelines to help ensure a smooth pr
 
 Thanks.
 
-## Issue reporting
+## Issue Reporting
 
 * Please browse our [existing issues][1] before logging new issues.
 * Check that the issue has not already been fixed in the `master` branch.
@@ -15,7 +15,7 @@ Thanks.
 * Please state the version of Operating System, Browser, and JSONRPC you are using in the description.
 * Include any relevant code in the issue summary.
 
-## Pull requests
+## Pull Requests
 
 * Read [how to properly contribute to open source projects on Github][2].
 * Fork the project.
