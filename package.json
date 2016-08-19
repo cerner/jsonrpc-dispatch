@@ -9,7 +9,7 @@
     "clean": "rm -rf dist lib",
     "test": "npm run lint-js && mocha --compilers js:babel-core/register test",
     "lint-js": "eslint src/* test/*",
-    "prepublish": "npm run build-es5"
+    "prepublish": "npm run build"
   },
   "keywords": [
     "JSONRPC", "Cerner"
