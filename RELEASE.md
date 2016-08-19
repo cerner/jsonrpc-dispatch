@@ -1,4 +1,4 @@
-# How To Release
+# How to Release
 
 This project is hosted on NPM.  You can see it [here][project-url].
 
