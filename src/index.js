@@ -1,4 +1,4 @@
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 import ERRORS from './errors';
 const JSONRPCVersion = '2.0';
 
