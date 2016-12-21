@@ -1,5 +1,6 @@
 # JSONRPC Dispatch
 
+[![NPM version](http://img.shields.io/npm/v/jsonrpc-dispatch.svg)](https://www.npmjs.org/package/jsonrpc-dispatch)
 [![Build Status](https://travis-ci.org/cerner/jsonrpc-dispatch.svg?branch=master)](https://travis-ci.org/cerner/jsonrpc-dispatch)
 
 JSONRPC is a module for managing [JSONRPC](http://json-rpc.org) requests and

@@ -25,7 +25,7 @@ Thanks.
 * Commit locally and push to your fork until you are happy with your contribution.
 * Make sure to add tests and verify all the tests are passing when merging upstream.
 * Add an entry to the [Changelog][4] accordingly.
-* Please add your name to the CONTRIBUTORS.md file. Adding your name to the CONTRIBUTORS.md file signifies agreement to all rights and reservations provided by the [License][5].
+* Please add your name to the [CONTRIBUTORS.md][8] file. Adding your name to the [CONTRIBUTORS.md][8] file signifies agreement to all rights and reservations provided by the [License][5].
 * [Squash related commits together][6].
 * Open a [pull request][7].
 * The pull request will be reviewed by the community and merged by the project committers.
@@ -37,3 +37,4 @@ Thanks.
 [5]: ./LICENSE
 [6]: http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html
 [7]: https://help.github.com/articles/using-pull-requests
+[8]: ./CONTRIBUTORS.md
